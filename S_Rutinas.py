@@ -1,5 +1,6 @@
 import random
 from tkinter import *
+from tkinter import messagebox
 from fpdf import FPDF
 
 ejercicios = [
@@ -27,34 +28,55 @@ class GeneradorRutinas:
             for ejercicio in rutina:
                 archivo_rutina.write(f"- Ejercicio: {ejercicio['nombre']}\n- Categoria: {ejercicio['categoria']}\n- Dificultad: {ejercicio['dificultad']}")
         print(f"Rutina Guardada en {file}")  
+    
+    def mostrarMensaje(self):
+        messagebox.showinfo("Atención Medica", "Acercate a un centro medico para obtener ayuda.")
 
     def main(self):
         ventana = Tk()
         ventana.title("Generador de Ejercicios.")
 
-        frame1 = Frame(ventana, bg="DeepSkyBlue2", height="600", width="200")
+        frame1 = Frame(ventana, bg="LemonChiffon2", height="400", width="200")
         frame1.pack_propagate(False)
-        frame1.pack(side=LEFT)
+        frame1.config(border = "10")
+        frame1.config(relief = SUNKEN)
+        frame1.pack()
+        frame1.place(x=0, y=0)
+        
+        frame2 = Frame(ventana, bg="LemonChiffon2", height="200", width="200", relief=SUNKEN)
+        frame2.pack_propagate(False)
+        frame2.config(border = "10")
+        frame2.config(relief = SUNKEN)
+        frame2.pack()
+        frame2.place(x=0, y=400)
 
         label_dolor = Label(frame1, text="LUGAR DEL DOLOR:", font="BOLD")
-        label_dolor.config(justify=LEFT)
         label_dolor.pack()
+        label_dolor.place(x=0, y=0)
+        
+        label_dolor2 = Label(frame1, text="Otro:")
+        label_dolor2.pack()
+        label_dolor2.place(x=10, y=230)
+        
+        entry_dolor = Entry(frame1)
+        entry_dolor.pack()
+        entry_dolor.place(x=50, y=230)
 
-        boton1 = Button(frame1, text="Piernas.")
-        boton1.place(x="10", y="50")
+        boton1 = Button(frame1, text="Piernas.", height="2", width="9")
         boton1.pack()
+        boton1.place(x=50, y=50)
 
-        boton2 = Button(frame1, text="Espalda.")
-        boton2.place(x="10", y="100")
+        boton2 = Button(frame1, text="Espalda.", height="2", width="9")
         boton2.pack()
+        boton2.place(x=50, y=100)
 
-        boton3 = Button(frame1, text="Hombros.")
-        boton3.place(x="10", y="150")
+        boton3 = Button(frame1, text="Hombros.", height="2", width="9")
         boton3.pack()
+        boton3.place(x=50, y=150)
 
-        boton4 = Button(frame1, text="Necesito Atencion Medica.")
-        boton4.place(x="10", y="200")
+        boton4 = Button(frame2, text="Necesito Atención Medica.", command=lambda: self.mostrarMensaje())
         boton4.pack()
+        boton4.place(x=15, y=70)
 
         ventana.geometry("800x600")
         ventana.mainloop()
