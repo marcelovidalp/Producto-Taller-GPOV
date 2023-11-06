@@ -18,7 +18,7 @@ class GeneradorRutinas:
         self.frame1.pack()
         self.frame1.place(x=0, y=0)
         
-        self.frame2 = Frame(self.ventana, bg="dark green", height="200", width="200", relief=SUNKEN)
+        self.frame2 = Frame(self.ventana, bg="dark green", height="200", width="200")
         self.frame2.pack_propagate(False)
         self.frame2.config(border = "10")
         self.frame2.config(relief = SUNKEN)
@@ -61,6 +61,8 @@ class GeneradorRutinas:
         self.label_ejercicio.pack()
         self.label_ejercicio.place(x=400, y=75)
 
+        self.labels_detalles = []
+
         self.label_categoria = Label(self.ventana, text="", font="BOLD")
         self.label_categoria.pack()
         self.label_categoria.place(x=399, y=103)
@@ -72,10 +74,9 @@ class GeneradorRutinas:
         self.ventana.geometry("800x600")
 
     def mostrarEjercicio(self, dolor):
-        rutina = self.generar_rutina(dolor)
-        if rutina:
-            for ejercicio in rutina:
-               self.mostrarDetalle(ejercicio)
+        ejercicios_related = self.generar_rutina(dolor)
+        if ejercicios_related:
+            self.mostrarDetalle(ejercicios_related)
         else:
             messagebox.showinfo("Generador de Ejercicios", f"No se encontraron ejercicios relacionados con el dolor: {dolor}")
         
@@ -95,16 +96,33 @@ class GeneradorRutinas:
             c.drawString(72, 720, f"- Dificultad: {ejercicio['dificultad']}")
 
         c.save()
-        print(f"La rutina ha sido guardada en {file}")
+        print(f"Los ejercicios han sido guardados en {file}")
 
     def mostrarMensaje(self):
         messagebox.showinfo("Atención Medica", "Acercate a un centro medico para obtener ayuda.")
 
     def mostrarDetalle(self, ejercicio):
-        self.label_ejercicio.config(text=f"Ejercicio: {ejercicio['nombre']}")
-        self.label_categoria.config(text=f"Categoria: {ejercicio['categoria']}")
-        self.label_dificultad.config(text=f"Dificultad: {ejercicio['dificultad']}")
+        for label in self.labels_detalles:
+            label.destroy()
 
+        self.labels_detalles = []
+
+        for ejercicio in ejercicios:
+            self.label_ejercicio.config(text=f"Ejercicio: {ejercicio['nombre']}")
+            self.label_categoria.config(text=f"Categoria: {ejercicio['categoria']}")
+            self.label_dificultad.config(text=f"Dificultad: {ejercicio['dificultad']}")
+
+            self.label_ejercicio.pack()
+            self.label_categoria.pack()
+            self.label_dificultad.pack()
+
+            self.labels_detalles.extend([self.label_ejercicio, self.label_categoria, self.label_dificultad])
+
+            y_offset = 160 + len(self.labels_detalles) * 30
+            for label in self.labels_detalles:
+                label.place(x=400, y=y_offset)
+                y_offset += 30
+            
     def main(self):
         self.boton1.config(command=lambda: self.mostrarEjercicio("Piernas"))
         self.boton2.config(command=lambda: self.mostrarEjercicio("Espalda"))
